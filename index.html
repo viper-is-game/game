@@ -59,6 +59,8 @@
     let gravity = 2;
     let score = 0;
     let pipes = [];
+    let gameInterval;
+    let pipeInterval;
 
     // Move the bird
     function gameLoop() {
@@ -68,8 +70,6 @@
       if (birdTop > game.clientHeight - 40 || birdTop < 0) {
         gameOver();
       }
-
-      requestAnimationFrame(gameLoop);
     }
 
     // Jump on spacebar
@@ -101,8 +101,6 @@
       game.appendChild(pipeBottom);
 
       pipes.push({ top: pipeTop, bottom: pipeBottom });
-
-      setTimeout(generatePipes, 2000);
     }
 
     // Move pipes
@@ -129,19 +127,26 @@
           gameOver();
         }
       });
-
-      requestAnimationFrame(movePipes);
     }
 
     // Game over
     function gameOver() {
+      clearInterval(gameInterval);
+      clearInterval(pipeInterval);
       alert("Game Over! Your score: " + score);
       location.reload();
     }
 
-    generatePipes();
-    movePipes();
-    gameLoop();
+    // Start the game
+    function startGame() {
+      gameInterval = setInterval(gameLoop, 20);
+      pipeInterval = setInterval(() => {
+        generatePipes();
+        movePipes();
+      }, 2000);
+    }
+
+    startGame();
   </script>
 </body>
 </html>
